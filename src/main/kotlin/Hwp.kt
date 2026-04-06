@@ -4,13 +4,18 @@ import kr.dogfoot.hwplib.tool.textextractor.TextExtractMethod
 import kr.dogfoot.hwplib.tool.textextractor.TextExtractor
 
 fun readHwp(filepath: String): HWPFile? {
-    val hwpFile: HWPFile = HWPReader.fromFile(filepath)
-    return if (hwpFile.bodyText.sectionList.size > 0) {
-        println("$filepath read success!")
-        hwpFile
-    } else {
-        println("$filepath read fail!")
-        null
+    return try {
+        val hwpFile: HWPFile = HWPReader.fromFile(filepath)
+        if (hwpFile.bodyText.sectionList.size > 0) {
+            println("$filepath read success!")
+            hwpFile
+        } else {
+            println("$filepath read fail - no sections!")
+            null
+        }
+    } catch (e: Exception) {
+        System.err.println("$filepath read error: ${e.message}")
+        throw e  // Main.kt에서 catch하여 폴백 처리
     }
 }
 
