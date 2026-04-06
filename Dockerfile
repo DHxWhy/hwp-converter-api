@@ -7,9 +7,9 @@ RUN mvn package -DskipTests -q
 
 FROM eclipse-temurin:11-jre-alpine
 WORKDIR /app
-COPY --from=build /app/target/hwp-converter-api-1.0-SNAPSHOT-jar-with-dependencies.jar /app/hwp-converter-api.jar
+COPY --from=build /app/target/hwp-converter-api-1.0-SNAPSHOT-jar-with-dependencies.jar /app/app.jar
 RUN mkdir -p sample_hwp
 
 EXPOSE 7000
 
-ENTRYPOINT ["java", "-jar", "./hwp-converter-api.jar"]
+ENTRYPOINT ["java", "-jar", "./app.jar"]
