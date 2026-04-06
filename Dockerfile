@@ -3,11 +3,13 @@ RUN apk add --no-cache maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn package -DskipTests -q
+RUN mvn package -DskipTests -q && \
+    ls -la target/*.jar && \
+    find target -name "*.jar" -not -name "original-*" | head -1 | xargs -I{} cp {} target/app.jar
 
 FROM eclipse-temurin:11-jre-alpine
 WORKDIR /app
-COPY --from=build /app/target/hwp-converter-api-1.0-SNAPSHOT-jar-with-dependencies.jar /app/app.jar
+COPY --from=build /app/target/app.jar /app/app.jar
 RUN mkdir -p sample_hwp
 
 EXPOSE 7000
